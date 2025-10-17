@@ -1,0 +1,459 @@
+/* iOS26 Liquid Glass (Glassmorphism) Theme for ACC site */
+:root {
+  --bg-1: 16 20 42; /* base RGB for deepest tone */
+  --accent-1: 44 56 135; /* brand blue (used in navbar) */
+  --glass-1: 255 255 255; /* highlight color for glass tints (RGB only) */
+  --glass-alpha: 0.08; /* base translucency */
+  --glass-border-alpha: 0.12;
+  --glass-strong-alpha: 0.16;
+  --glass-shadow: 0 8px 30px rgba(12,14,30,0.45);
+  --text-muted: rgba(250,250,255,0.85);
+  --radius-lg: 14px;
+  --radius-md: 10px;
+  --glass-blur: 12px;
+}
+
+/* Global body background: layered animated gradient to evoke subtle liquid motion */
+*{box-sizing:border-box}
+html,body{height:100%}
+body {
+  margin: 0;
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  color: #474747; /* default text color on light background */
+  background: #fafeff; /* clean white background */
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  min-height:100%;
+  position:relative;
+  overflow-x:hidden;
+}
+
+/* Floating subtle noise/shine using a pseudo element to emulate liquid depth */
+body::before{
+  content: "";
+  position:fixed;
+  inset: -20% -20% -40% -20%;
+  background: radial-gradient(ellipse at 10% 10%, rgba(255,255,255,0.02), transparent 8%),
+              radial-gradient(ellipse at 90% 90%, rgba(255,255,255,0.02), transparent 8%);
+  pointer-events:none;
+  z-index:0;
+  mix-blend-mode:overlay;
+}
+
+/* Reusable glass surface */
+.glass {
+  background: linear-gradient(135deg, rgba(var(--glass-1), calc(var(--glass-alpha) + 0.02)), rgba(var(--glass-1), var(--glass-alpha)));
+  border-radius: var(--radius-md);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(120%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(120%);
+  border: 1px solid rgba(var(--glass-1), var(--glass-border-alpha));
+  box-shadow: var(--glass-shadow);
+  color: var(--text-muted);
+}
+
+/* Navbar: frosted glass bar pinned to top */
+.navbar {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-bottom: 1px solid rgba(var(--glass-1), var(--glass-border-alpha));
+  -webkit-backdrop-filter: blur(10px) saturate(110%);
+  backdrop-filter: blur(10px) saturate(110%);
+  box-shadow: 0 6px 20px rgba(12,14,30,0.35);
+}
+.navbar .navbar-brand img {
+  border-radius: 10rem;
+  border: 1px solid rgba(var(--glass-1), 0.12);
+  padding: 4px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+  -webkit-backdrop-filter: blur(6px);
+}
+.navbar .nav-link {
+  color: rgba(250,250,255,0.9) !important;
+  transition: color .18s ease, transform .18s ease;
+}
+.navbar .nav-link:hover {
+  color: #ffffff !important;
+  transform: translateY(-2px);
+}
+.navbar .navbar-toggler {
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+@media (min-width: 992px) {
+  .navbar .nav-link {
+    padding-bottom: .5rem; /* space for underline */
+  }
+  .navbar .nav-link.active {
+    position: relative;
+  }
+  .navbar .nav-link.active::after {
+    content: '';
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: -6px;
+    height: 3px;
+    background: #fafeff; /* visible on dark navbar */
+    border-radius: 2px;
+    transition: width .22s ease, opacity .22s ease;
+    opacity: 1;
+  }
+}
+
+/* Mobile fixed toggler pinned top-right on small screens */
+.mobile-fixed-toggler {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 1055; /* above navbar */
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  backdrop-filter: blur(8px) saturate(120%);
+  box-shadow: 0 8px 20px rgba(6,8,20,0.35);
+}
+
+/* Ensure toggler is only fixed on small screens; on larger, revert to normal flow */
+@media (min-width: 992px) {
+  .mobile-fixed-toggler {
+    position: static;
+    top: auto;
+    right: auto;
+    z-index: auto;
+    margin-left: 0.5rem;
+  }
+}
+
+/* Prevent dragging/moving */
+.mobile-fixed-toggler { touch-action: none; }
+
+/* Hero Section: large centered glass card over animated backdrop */
+.hero-section {
+  min-height: 60vh;
+  padding-top: 7.5rem; /* to compensate for fixed navbar */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  z-index:1;
+  text-shadow: 0 6px 40px rgba(12,14,30,0.45);
+
+  /* Use the supplied washed-out background image for the hero */
+  background-image: url('../background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  /* Gentle dark overlay so white text stays readable while preserving washed-out look */
+  background-color: rgba(3,8,25,0.30);
+  background-blend-mode: overlay;
+}
+.hero-section::after{
+  content: "";
+  position:absolute;
+  inset:0;
+  background: radial-gradient(600px 300px at 15% 30%, rgba(76,168,255,0.06), transparent 12%),
+              radial-gradient(400px 200px at 85% 70%, rgba(203,153,255,0.04), transparent 10%);
+  z-index:0;
+  pointer-events:none;
+}
+.hero-section .container{position:relative;z-index:2}
+.hero-logo{
+  width:250px;
+  height:250px;
+  object-fit:cover;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,0.16);
+  padding:8px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.01));
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 14px 40px rgba(12,14,30,0.45);
+  transition: transform .18s ease;
+}
+
+@media (max-width: 768px) {
+  .hero-logo{ width:170px; height:170px }
+}
+
+/* Mobile: compact hero override (higher specificity to override earlier rules) */
+@media (max-width: 768px) {
+  .hero-section {
+    min-height: 30vh !important;
+    padding-top: 5.5rem !important;
+  }
+}
+
+.hero-section h1, .hero-section .lead {
+  color: #fff;
+}
+
+/* About page: more compact hero */
+.about-hero {
+  min-height: 30vh; /* reduced from the default 60vh */
+  padding-top: 6rem; /* slightly smaller top space */
+  padding-bottom: 1.5rem;
+}
+@media (max-width: 768px) {
+  .about-hero { min-height: 15vh; padding-top: 1rem; padding-bottom: 0.05rem; }
+}
+
+/* Section cards (Mission & Vision, Goals) use glass style */
+#mission-vision .p-4,
+#goals .p-4,
+#hymn .p-4 {
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.06);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 28px rgba(9,11,20,0.46);
+  color: rgba(250,250,255,0.95);
+}
+
+/* History card: light background for about page */
+#history .p-4 {
+  background: #fafeff;
+  color: #474747;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 8px 24px rgba(18,22,28,0.04);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-radius: 24px; /* Increased corner radius */
+}
+
+#history .p-4 h2 { color: #0022ff; }
+#history .p-4 p { color: #474747; }
+
+/* Strong override: make history card very rounded */
+body.about-page #history .p-4 {
+  border-radius: 40px !important;
+}
+
+/* Background panels for light sections: keep glass but lighter */
+.bg-light { background: transparent; }
+
+/* Typography tweaks */
+h2 { color: rgba(255,255,255,0.95); }
+h3 { color: rgba(255,255,255,0.95); }
+/* paragraphs and list items use dark gray for readability */
+p, li { color: #474747; }
+
+/* Buttons styled as glassy pills */
+.btn-glass {
+  display:inline-block;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(9,10,25,0.45);
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.btn-glass:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 38px rgba(9,10,25,0.55);
+}
+
+/* Cards inside list items & objectives */
+ol li > ul li {
+  background: rgba(255,255,255,0.02);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+/* Footer: gentle glass bar */
+footer {
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border-top: 1px solid rgba(255,255,255,0.06);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* Section spacing and subtle separators */
+section {
+  padding: 3.5rem 0;
+}
+@media (min-width: 992px) {
+  section {
+    padding: 5rem 0;
+  }
+}
+
+#hymn, #mission-vision, #goals {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-top: 1px solid rgba(255,255,255,0.03);
+}
+
+#hymn .container, #mission-vision .container, #goals .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Utility: reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { transition:none !important; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero-logo{ width:170px; height:170px }
+  .hero-section { padding-top:6.5rem; min-height:56vh }
+  .navbar { padding: 0.5rem 1rem }
+}
+
+/* Accessibility: ensure contrast on small text */
+small, .small { color: rgba(250,250,255,0.78); }
+
+/* Utility glass class for manual application */
+.glass-strong {
+  background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+  border: 1px solid rgba(255,255,255,0.14);
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  backdrop-filter: blur(14px) saturate(130%);
+  box-shadow: 0 14px 50px rgba(6,8,20,0.55);
+}
+
+/* Fallback for browsers that don't support backdrop-filter */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .glass, .glass-strong, .navbar, footer { background-color: rgba(18,22,48,0.7); border: 1px solid rgba(255,255,255,0.03); }
+}
+
+/* Mission-Vision gradient overrides */
+#mission-vision .p-4 {
+  background: linear-gradient(180deg, #f5f7fa 0%, #e6e9ec 100%);
+  border: 1px solid rgba(0,0,0,0.01);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 24px rgba(18,22,28,0.06);
+  color: #474747;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+#goals .p-4,
+#hymn .p-4 {
+  /* enforce the original glass look in case of specificity issues */
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.06);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 28px rgba(9,11,20,0.46);
+  color: rgba(250,250,255,0.95);
+}
+
+/* About page background override: apply page background but keep hero visuals */
+body.about-page {
+  background: #fafeff !important;
+  color: #474747 !important;
+  /* keep other page backgrounds from propagating */
+  background-image: none !important;
+}
+
+/* Restore hero background on about page specifically */
+.about-page .hero-section {
+  background-image: url('../background.png') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-color: rgba(3,8,25,0.18) !important; /* lighter overlay to allow text contrast */
+  background-blend-mode: overlay !important;
+  color: #fff;
+}
+
+.about-page .hero-section::after{
+  /* keep existing radial overlays but slightly muted */
+  background: radial-gradient(600px 300px at 15% 30%, rgba(76,168,255,0.04), transparent 12%),
+              radial-gradient(400px 200px at 85% 70%, rgba(203,153,255,0.03), transparent 10%);
+}
+
+.about-page .hero-section h1, .about-page .hero-section .lead {
+  color: #fff;
+}
+
+/* Strong override: make mission & vision cards more rounded */
+body #mission-vision .p-4, body#index #mission-vision .p-4 {
+  border-radius: 30px !important;
+}
+
+/* Mobile & narrow footer typography adjustments */
+@media (max-width: 768px) {
+  footer .small {
+    font-size: 12px;
+    line-height: 1.2;
+  }
+}
+@media (max-width: 480px) {
+  footer .small {
+    font-size: 11px;
+  }
+}
+
+/* For small screens, ensure gallery modal appears as a centered dialog instead of fullscreen */
+@media (max-width: 768px) {
+  #galleryModal .modal-dialog {
+    max-width: 98%;
+  }
+  #galleryModal .modal-content { border-radius: 20px; }
+}
+@media (min-width: 769px) {
+  /* on larger screens use wider modal */
+  #galleryModal .modal-dialog { max-width: 1100px; }
+  #galleryModal .modal-content { border-radius: 30px; }
+}
+
+/* iPad-specific sizing for gallery modal */
+@media (min-width: 768px) and (max-width: 1024px) {
+  #galleryModal .modal-dialog {
+    max-width: 95% !important;
+  }
+}
+
+/* Ensure modal content clips inner images so bottom corners round correctly */
+#galleryModal .modal-content {
+  overflow: hidden;
+}
+
+/* Match image bottom radii to modal-content radii */
+@media (max-width: 768px) {
+  #galleryModal .carousel-inner img {
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
+}
+@media (min-width: 769px) {
+  #galleryModal .carousel-inner img {
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+  }
+}
+
+/* Show only first two thumbnail rows; additional thumbs hidden and accessible via View Gallery */
+.event-thumbs {
+  max-height: calc(2 * (6.5rem)); /* approximate two rows height (adjust if needed) */
+  overflow: hidden;
+}
+/* ensure images maintain spacing when clipped */
+.event-thumbs .col-6 { padding-bottom: 0.5rem; }
+
+@media (min-width: 576px) {
+  .event-thumbs { max-height: calc(2 * (8rem)); }
+}
+@media (min-width: 992px) {
+  .event-thumbs { max-height: calc(2 * (10rem)); }
+}
+
+/* Fees notes color override */
+.fees-notes {
+  color: #4a4a4a !important;
+  background-color: rgba(250,250,255,0.9) !important;
+  border-color: rgba(0,0,0,0.04) !important;
+}
